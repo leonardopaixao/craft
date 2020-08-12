@@ -1,0 +1,46 @@
+{% extends "index" %}
+
+{% set featureImage = {
+    mode: 'crop',
+    width: 400,
+    height: 500,
+    quality: 90
+} %}
+
+{% block content %}
+
+    <section class="container">
+        <h1>{{ entry.title }}</h1>
+
+        <time datetime="{{ entry.postDate | date('d.m.Y') }}">{{ entry.postDate | date('d.m.Y') }}<br/>
+
+        <div class="row">
+            <div class="col">
+                {% if entry.featureImage|length %}
+                    {% for image in entry.featureImage.all() %}
+                        <img src="{{ image.getUrl(featureImage) }}" alt="{{ image.title }}" />
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col">
+                {% if entry.summary is not empty %}
+                    <p>{{ entry.summary }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% include "_includes/post-block" with { blocks: entry.postContent.all() } only %}
+
+        {# display post categories #}
+        {% if entry.postCategories|length %}
+        <div class="border-t py-2 mb-6">
+            {% for category in entry.postCategories.all() %}
+            <a href="{{ category.url }}" class="inline-block border rounded px-2 py-1 text-sm">
+                {{- category.title -}}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
+
+{% endblock %}

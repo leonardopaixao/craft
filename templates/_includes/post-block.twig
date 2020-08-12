@@ -1,0 +1,20 @@
+{% set imgSettings = {
+    mode:'crop',
+    width: 600,
+    height: 500,
+    quality: 95
+} %}
+
+<div>
+    {% for block in blocks %}
+        <div>
+            {% if block.type == 'text' %}
+                {{ block.text }}
+            {% elseif block.type == 'image' %}
+                {% for image in block.image.all() %}
+                    <img src="{{ image.getUrl(imgSettings) }}" alt="{{ image.title }}" />
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
